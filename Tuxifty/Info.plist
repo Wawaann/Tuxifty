@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>$(API_KEY)</string>
+	<key>API_UID</key>
+	<string>$(API_UID)</string>
+	<key>API_URL</key>
+	<string>$(API_URL)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.Tux.Tuxifty</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tuxifty</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
