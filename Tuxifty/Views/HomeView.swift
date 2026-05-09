@@ -11,7 +11,6 @@ struct HomeView: View {
     var userModel: User;
     var userViewModel: UserViewModel;
     @State private var selectedCursusIndex: Int;
-    @State private var selectedTab: Int = 0;
     
     init(
         userModel: User,
@@ -24,65 +23,56 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.95, green: 0.97, blue: 1.0),
-                    Color(red: 0.91, green: 0.95, blue: 1.0)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        
+            Color(.testcolor)
+            
             VStack(alignment: .leading) {
-                Group {
-                    Button {
-                        Task { userViewModel.reset() }
-                    } label: {
-                        HStack(spacing: 2) {
-                            Image(systemName: "chevron.left")
-                                .padding(.leading, 10)
-                                .font(.subheadline)
-                            Text("Back")
-                                .padding(.trailing, 10)
+                Button {
+                    Task { userViewModel.reset() }
+                } label: {
+                    HStack(spacing: 2) {
+                        Image(systemName: "chevron.left")
+                            .padding(.leading, 10)
+                            .font(.subheadline)
+                        Text("Back")
+                            .padding(.trailing, 10)
+                    }
+                    .fontWeight(.regular)
+                    .foregroundStyle(.blue)
+                    .padding(.vertical, 5)
+                }
+                .clipShape(Capsule())
+                .background(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(Color.white)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(Color.blue.opacity(0.35), lineWidth: 1)
+                )
+                .buttonStyle(.plain)
+                
+                HeaderView(user: userModel, selectedCursusIndex: $selectedCursusIndex)
+                
+                TabView {
+                    ProjectsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
+                        .padding(.bottom, 10)
+                        .background(Color(.testcolor))
+                        .tabItem {
+                            Label("Projects", systemImage: "clipboard")
                         }
-                        .fontWeight(.regular)
-                        .foregroundStyle(.blue)
-                        .padding(.vertical, 5)
-                    }
-                    .clipShape(Capsule())
-                    .background(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color.white)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .stroke(Color.blue.opacity(0.35), lineWidth: 1)
-                    )
-                    .buttonStyle(.plain)
-                    
-                    HeaderView(user: userModel, selectedCursusIndex: $selectedCursusIndex)
+                    SkillsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
+                        .padding(.bottom, 10)
+                        .tabItem {
+                            Label("Skills", systemImage: "brain")
+                        }
+                    AchievementsView(achievements: userModel.achievements)
+                        .padding(.bottom, 10)
+                        .tabItem {
+                            Label("Achievements", systemImage: "book")
+                        }
                 }
-                .padding(.horizontal, 10)
-                
-                ZStack {
-                    switch selectedTab {
-                    case 0:
-                        ProjectsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
-                    case 1:
-                        SkillsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
-                    case 2:
-                        AchievementsView(achievements: userModel.achievements)
-                    default:
-                        EmptyView()
-                    }
-                }
-                .padding(.horizontal, 10)
-                .padding(.bottom, 10)
-                
-                Spacer(minLength: 0)
-                
-                CustomTabBar(selectedTab: $selectedTab)
             }
+            .padding(.horizontal, 10)
         }
     }
 }
