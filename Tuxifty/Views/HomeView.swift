@@ -23,66 +23,55 @@ struct HomeView: View {
     }
     
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.95, green: 0.97, blue: 1.0),
-                    Color(red: 0.91, green: 0.95, blue: 1.0)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        
-            VStack(alignment: .leading) {
-                Group {
-                    Button {
-                        Task { userViewModel.reset() }
-                    } label: {
-                        HStack(spacing: 2) {
-                            Image(systemName: "chevron.left")
-                                .padding(.leading, 10)
-                                .font(.subheadline)
-                            Text("Back")
-                                .padding(.trailing, 10)
-                        }
-                        .fontWeight(.regular)
-                        .foregroundStyle(.blue)
-                        .padding(.vertical, 5)
+        VStack(alignment: .leading) {
+            Group {
+                Button {
+                    Task { userViewModel.reset() }
+                } label: {
+                    HStack(spacing: 2) {
+                        Image(systemName: "chevron.left")
+                            .padding(.leading, 10)
+                            .font(.subheadline)
+                        Text("Back")
+                            .padding(.trailing, 10)
                     }
-                    .clipShape(Capsule())
-                    .background(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color.white)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .stroke(Color.blue.opacity(0.35), lineWidth: 1)
-                    )
-                    .buttonStyle(.plain)
-                    
-                    HeaderView(user: userModel, selectedCursusIndex: $selectedCursusIndex)
+                    .fontWeight(.regular)
+                    .foregroundStyle(.blue)
+                    .padding(.vertical, 5)
                 }
-                .padding(.horizontal, 10)
+                .clipShape(Capsule())
+                .background(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(.ultraThinMaterial.opacity(0.35))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(Color.blue.opacity(0.35), lineWidth: 1)
+                )
+                .buttonStyle(.plain)
                 
-                ZStack {
-                    switch selectedTab {
-                    case 0:
-                        ProjectsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
-                    case 1:
-                        SkillsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
-                    case 2:
-                        AchievementsView(achievements: userModel.achievements)
-                    default:
-                        EmptyView()
-                    }
-                }
-                .padding(.horizontal, 10)
-                .padding(.bottom, 10)
-                
-                Spacer(minLength: 0)
-                
-                CustomTabBar(selectedTab: $selectedTab)
+                HeaderView(user: userModel, selectedCursusIndex: $selectedCursusIndex)
             }
+            .padding(.horizontal, 10)
+            
+            ZStack {
+                switch selectedTab {
+                case 0:
+                    ProjectsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
+                case 1:
+                    SkillsView(user: userModel, selectedCursusIndex: selectedCursusIndex)
+                case 2:
+                    AchievementsView(achievements: userModel.achievements)
+                default:
+                    EmptyView()
+                }
+            }
+            .padding(.horizontal, 10)
+            .padding(.bottom, 10)
+            
+            Spacer(minLength: 0)
+            
+            CustomTabBar(selectedTab: $selectedTab)
         }
     }
 }

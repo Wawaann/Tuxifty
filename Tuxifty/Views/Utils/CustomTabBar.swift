@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct CustomTabBar: View {
-    @Binding var selectedTab: Int
+    @Binding var selectedTab: Int;
+    @Namespace private var tabAniation;
 
     let tabs: [(label: String, icon: String)] = [
-        ("Projects", "clipboard"),
-        ("Skills", "brain"),
-        ("Achievements", "book")
+        ("Projects", "list.clipboard"),
+        ("Skills", "star"),
+        ("Achievements", "trophy")
     ]
 
     var body: some View {
@@ -21,7 +22,9 @@ struct CustomTabBar: View {
             ForEach(tabs.indices, id: \.self) { index in
                 Spacer()
                 Button {
-                    selectedTab = index
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                        selectedTab = index
+                    }
                 } label: {
                     VStack(spacing: 4) {
                         Image(systemName: tabs[index].icon)
@@ -29,32 +32,85 @@ struct CustomTabBar: View {
                         Text(tabs[index].label)
                             .font(.caption2)
                     }
+                    .frame(minWidth: 70)
                     .foregroundStyle(selectedTab == index ? .blue : .gray)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)
-                    .background(
-                        selectedTab == index
-                            ? Capsule().fill(Color.blue.opacity(0.12))
-                            : Capsule().fill(Color.clear)
-                    )
+                    .background {
+                        if selectedTab == index {
+                            Capsule()
+                                .fill(Color.blue.opacity(0.12))
+                                .matchedGeometryEffect(id: "TAB_HIGHLIGHT", in: tabAniation)
+                        } else {
+                            Capsule().fill(Color.clear)
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
+                
                 Spacer()
             }
         }
         .padding(.horizontal, 8)
-        .padding(.bottom, 8) // safe area iPhone
+        .padding(.bottom, 8)
         .padding(.top, 8)
         .background(
-            // Carte blanche avec blur léger pour imiter la TabBar native
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(.ultraThinMaterial)
+            RoundedRectangle(cornerRadius: 99, style: .continuous)
+                .fill(.ultraThinMaterial.opacity(0.35))
                 .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -2)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 99, style: .continuous)
+                .stroke(Color.gray.opacity(0.35), lineWidth: 1)
         )
         .padding(.horizontal, 10)
     }
 }
 
 #Preview {
-    CustomTabBar(selectedTab: .constant(0))
+    PreviewWrapper()
+}
+
+struct PreviewWrapper: View {
+    @State private var selectedTab: Int = 0;
+    
+    var body: some View {
+        ZStack {
+            ZStack {
+                Color(.base)
+                
+                RadialGradient(
+                    colors: [
+                        Color.radialTopLeading.opacity(0.35),
+                        Color.radialTopLeading.opacity(0.0)
+                    ],
+                    center: .topLeading,
+                    startRadius: 20,
+                    endRadius: 320
+                )
+                
+                RadialGradient(
+                    colors: [
+                        Color.radialTrailing.opacity(0.30),
+                        Color.radialTrailing.opacity(0.0)
+                    ],
+                    center: .trailing,
+                    startRadius: 10,
+                    endRadius: 280
+                )
+                
+                RadialGradient(
+                    colors: [
+                        Color.radialBottom.opacity(0.25),
+                        Color.radialBottom.opacity(0.0)
+                    ],
+                    center: .bottom,
+                    startRadius: 30,
+                    endRadius: 300
+                )
+            }
+            .ignoresSafeArea()
+            CustomTabBar(selectedTab: $selectedTab)
+        }
+    }
 }

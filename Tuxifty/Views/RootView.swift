@@ -22,15 +22,41 @@ struct RootView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.95, green: 0.97, blue: 1.0),
-                    Color(red: 0.91, green: 0.95, blue: 1.0)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            ZStack {
+                Color(.base)
+
+                RadialGradient(
+                    colors: [
+                        Color.radialTopLeading.opacity(0.35),
+                        Color.radialTopLeading.opacity(0.0)
+                    ],
+                    center: .topLeading,
+                    startRadius: 20,
+                    endRadius: 320
+                )
+
+                RadialGradient(
+                    colors: [
+                        Color.radialTrailing.opacity(0.30),
+                        Color.radialTrailing.opacity(0.0)
+                    ],
+                    center: .trailing,
+                    startRadius: 10,
+                    endRadius: 280
+                )
+
+                RadialGradient(
+                    colors: [
+                        Color.radialBottom.opacity(0.25),
+                        Color.radialBottom.opacity(0.0)
+                    ],
+                    center: .bottom,
+                    startRadius: 30,
+                    endRadius: 300
+                )
+            }
             .ignoresSafeArea()
+            
             Group {
                 switch userViewModel.state {
                 case .idle:

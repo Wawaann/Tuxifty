@@ -20,7 +20,7 @@ struct HeaderView: View {
                     Text(user.login)
                         .font(.title3)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.title)
                     
                     if let location = user.location, !location.isEmpty {
                         Spacer()
@@ -45,13 +45,13 @@ struct HeaderView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white)
+                .fill(.ultraThinMaterial.opacity(0.35))
+                .shadow(color: Color.shadow.opacity(0.12), radius: 8, x: 0, y: 4)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(Color.gray.opacity(0.35), lineWidth: 1)
+                .stroke(Color.cardBorder.opacity(0.35), lineWidth: 1)
         )
-        .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 4)
     }
 
     private var profileImage: some View {
@@ -74,7 +74,7 @@ struct HeaderView: View {
         .clipShape(Circle())
         .overlay(
             Circle()
-                .stroke(Color.gray.opacity(0.65), lineWidth: 2)
+                .stroke(Color.avatarBorder.opacity(0.65), lineWidth: 2)
         )
     }
 }

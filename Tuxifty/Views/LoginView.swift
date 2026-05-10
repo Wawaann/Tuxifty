@@ -18,6 +18,7 @@ struct LoginView: View {
             Text("Welcome to Tuxifty")
                 .font(.title2)
                 .fontWeight(.semibold)
+                .foregroundStyle(Color(.title))
             
             TextField("Login", text: $login)
                 .textInputAutocapitalization(.never)
@@ -26,11 +27,11 @@ struct LoginView: View {
                 .padding(.vertical, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 999, style: .continuous)
-                        .fill(Color.white)
+                        .fill(.inputBackground)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 999, style: .continuous)
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(Color.inputBorder, lineWidth: 2)
                 )
             
             Button {
@@ -43,7 +44,7 @@ struct LoginView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(.blue)
+                    .background(.buttonBackground)
                     .clipShape(Capsule())
                     .contentShape(Capsule())
             }
@@ -54,13 +55,13 @@ struct LoginView: View {
         .frame(maxWidth: 420)
         .background(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial.opacity(0.5))
+                .fill(.ultraThinMaterial.opacity(0.35))
+                .shadow(color: Color.shadow.opacity(0.15), radius: 9, x: 0, y: 4)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(Color.gray.opacity(0.35), lineWidth: 1)
+                .stroke(Color.cardBorder.opacity(0.35), lineWidth: 1)
         )
-        .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 4)
     }
 }
 

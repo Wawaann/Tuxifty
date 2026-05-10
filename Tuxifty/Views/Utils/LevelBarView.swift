@@ -19,9 +19,11 @@ struct LevelBarView: View {
                 HStack(alignment: .center) {
                     Text(roundedLevel)
                         .font(.largeTitle)
+                        .foregroundStyle(Color(.title))
                     VStack(alignment: .leading) {
                         HStack {
                             Text(completionLevel)
+                                .foregroundStyle(.title)
                             Spacer()
                             Button {
                                 showGradeDialog = true
@@ -30,8 +32,8 @@ struct LevelBarView: View {
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                     .frame(width: 130, height: 40, alignment: .center)
-                                    .background(Color.gray.opacity(0.1))
-                                    .foregroundColor(.black)
+                                    .background(Color.cursusChipBg.opacity(0.1))
+                                    .foregroundColor(.cursusChipText)
                                     .cornerRadius(20)
                                     .font(.footnote)
                             }
@@ -45,8 +47,8 @@ struct LevelBarView: View {
                         }
                         LinearProgressView(value: cursus[currentIndex].level - floor(cursus[currentIndex].level), shape: Capsule())
                             .tint(currentIndex == 0
-                                  ? LinearGradient(colors: [.blue, .cyan], startPoint: .leading, endPoint: .trailing)
-                                  : LinearGradient(colors: [.indigo, .purple], startPoint: .leading, endPoint: .trailing)
+                                  ? LinearGradient(colors: [Color(.progressMainStart), Color(.progressMainEnd)], startPoint: .leading, endPoint: .trailing)
+                                  : LinearGradient(colors: [Color(.progressAltStart), Color(.progressAltEnd)], startPoint: .leading, endPoint: .trailing)
                             )
                             .frame(height: 7)
                     }
