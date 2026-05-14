@@ -19,6 +19,7 @@ struct Project42: Codable, Identifiable, Equatable {
     var project: ProjectName;
     var cursusIds: [Int];
     var markedAt: String?;
+    var createdAt: String;
     
     enum CodingKeys: String, CodingKey {
         case id;
@@ -28,6 +29,7 @@ struct Project42: Codable, Identifiable, Equatable {
         case project;
         case cursusIds = "cursus_ids";
         case markedAt = "marked_at";
+        case createdAt = "created_at";
     }
     
     static var example: Project42 {

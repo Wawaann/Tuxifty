@@ -9,8 +9,10 @@ import SwiftUI
 import SwiftDraw
 
 struct AchievementsView: View {
+    
+    let achievements: [Achievements42];
+    var selectedCursusIndex: Int;
     @State private var searchQuery: String = "";
-    var achievements: [Achievements42];
     
     var body: some View {
         let displayedAchievements = searchQuery.isEmpty
@@ -20,26 +22,53 @@ struct AchievementsView: View {
                 .localizedCaseInsensitiveContains(searchQuery);
         }
         
-        NavigationStack {
+        VStack(alignment: .leading) {
+            Text("Achievements")
+                .font(Font.largeTitle.bold())
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+            
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.gray)
+
+                TextField(
+                    achievements.isEmpty ? "No achievements" : "Search...",
+                    text: $searchQuery
+                )
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                
+                Button {
+                    searchQuery = ""
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(.gray)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color.clear)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(Color.gray.opacity(0.35), lineWidth: 1)
+            )
+            .padding(.horizontal, 20)
+            
             List(displayedAchievements) { achievement in
+                let color: Color = selectedCursusIndex == 0
+                    ? Color(.progressMainStart)
+                    : Color(.progressAltStart)
                 if let url = URL(string: getAchievementIcon(image: achievement.image)) {
-                    SingleAchievementView(achievement: achievement, iconURL: url);
+                    SingleAchievementView(achievement: achievement, iconURL: url, color: color);
                 } else {
-                    SingleAchievementView(achievement: achievement, iconURL: nil);
+                    SingleAchievementView(achievement: achievement, iconURL: nil, color: color);
                 }
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .searchable(text: $searchQuery, prompt: "Search achievements...")
-            .navigationTitle("Achievements")
-            .toolbarTitleDisplayMode(.inlineLarge)
         }
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 4)
-        )
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(Color.gray.opacity(0.35), lineWidth: 1)
@@ -55,5 +84,41 @@ struct AchievementsView: View {
 }
 
 #Preview {
-    AchievementsView(achievements: Achievements42.tabExample);
+    ZStack {
+        ZStack {
+            Color(.base)
+            
+            RadialGradient(
+                colors: [
+                    Color.radialTopLeading.opacity(0.35),
+                    Color.radialTopLeading.opacity(0.0)
+                ],
+                center: .topLeading,
+                startRadius: 20,
+                endRadius: 320
+            )
+            
+            RadialGradient(
+                colors: [
+                    Color.radialTrailing.opacity(0.30),
+                    Color.radialTrailing.opacity(0.0)
+                ],
+                center: .trailing,
+                startRadius: 10,
+                endRadius: 280
+            )
+            
+            RadialGradient(
+                colors: [
+                    Color.radialBottom.opacity(0.25),
+                    Color.radialBottom.opacity(0.0)
+                ],
+                center: .bottom,
+                startRadius: 30,
+                endRadius: 300
+            )
+        }
+        .ignoresSafeArea()
+        AchievementsView(achievements: Achievements42.tabExample, selectedCursusIndex: 1)
+    }
 }

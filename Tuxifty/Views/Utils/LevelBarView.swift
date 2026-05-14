@@ -16,12 +16,12 @@ struct LevelBarView: View {
         Group {
             if !user.cursus.isEmpty {
                 let cursus = user.cursus
-                HStack(alignment: .center) {
+                HStack(alignment: .bottom) {
                     Text(roundedLevel)
-                        .font(.largeTitle)
+                        .font(.title)
                         .foregroundStyle(Color(.title))
-                    VStack(alignment: .leading) {
-                        HStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack(alignment: .bottom) {
                             Text(completionLevel)
                                 .foregroundStyle(.title)
                             Spacer()
@@ -31,11 +31,11 @@ struct LevelBarView: View {
                                 Label(cursus[currentIndex].cursus.name, systemImage: "chevron.down")
                                     .lineLimit(1)
                                     .truncationMode(.tail)
-                                    .frame(width: 130, height: 40, alignment: .center)
+                                    .frame(width: 100, height: 30, alignment: .center)
                                     .background(Color.cursusChipBg.opacity(0.1))
                                     .foregroundColor(.cursusChipText)
                                     .cornerRadius(20)
-                                    .font(.footnote)
+                                    .font(.caption)
                             }
                             .confirmationDialog("Choose a cursus", isPresented: $showGradeDialog, titleVisibility: .visible) {
                                 ForEach(Array(cursus.enumerated()), id: \.offset) { index, item in
@@ -50,7 +50,7 @@ struct LevelBarView: View {
                                   ? LinearGradient(colors: [Color(.progressMainStart), Color(.progressMainEnd)], startPoint: .leading, endPoint: .trailing)
                                   : LinearGradient(colors: [Color(.progressAltStart), Color(.progressAltEnd)], startPoint: .leading, endPoint: .trailing)
                             )
-                            .frame(height: 7)
+                            .frame(height: 5)
                     }
                 }
             } else {

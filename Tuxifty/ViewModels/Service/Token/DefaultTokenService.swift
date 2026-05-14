@@ -18,8 +18,6 @@ struct DefaultTokenService: TokenService {
         let url = URL(string: apiURL + "/oauth/token");
         let postBody = "grant_type=client_credentials&client_id=\(apiUID)&client_secret=\(apiKEY)";
         
-        print("BODY: ", postBody);
-        
         guard let requestUrl = url else {
             throw APIError.invalidURL;
         }
@@ -27,8 +25,6 @@ struct DefaultTokenService: TokenService {
         var request = URLRequest(url: requestUrl);
         request.httpMethod = "POST";
         request.httpBody = postBody.data(using: String.Encoding.utf8);
-        
-        print("start fetching");
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request);

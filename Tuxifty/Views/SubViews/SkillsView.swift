@@ -13,21 +13,56 @@ struct SkillsView: View {
     @State private var searchQuery: String = "";
 
     var body: some View {
+        
         let safeIndex = user.cursus.indices.contains(selectedCursusIndex) ? selectedCursusIndex : 0;
+        
         let skills = user.cursus[safeIndex].skills;
+        
         let displayedSkills = searchQuery.isEmpty
             ? skills
             : skills.filter { skill in
                 skill.name.localizedCaseInsensitiveContains(searchQuery);
             };
 
-        NavigationStack {
+        VStack(alignment: .leading) {
+            Text("Skills")
+                .font(Font.largeTitle.bold())
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+            
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.gray)
+
+                TextField(
+                    skills.isEmpty ? "No skills in this cursus" : "Search...",
+                    text: $searchQuery
+                )
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                
+                Button {
+                    searchQuery = ""
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(.gray)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color.clear)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(Color.gray.opacity(0.35), lineWidth: 1)
+            )
+            .padding(.horizontal, 20)
+            
             List(displayedSkills) { skill in
                 SingleSkillView(
                     skill: skill,
                     linearGradient: selectedCursusIndex == 0
-                    ? LinearGradient(colors: [.blue, .cyan], startPoint: .leading, endPoint: .trailing)
-                    : LinearGradient(colors: [.indigo, .purple], startPoint: .leading, endPoint: .trailing),
+                    ? LinearGradient(colors: [.progressMainStart, .progressMainEnd], startPoint: .leading, endPoint: .trailing)
+                    : LinearGradient(colors: [.progressAltStart, .progressAltEnd], startPoint: .leading, endPoint: .trailing),
                     color: selectedCursusIndex == 0
                     ? Color.blue
                     : Color.indigo
@@ -35,15 +70,9 @@ struct SkillsView: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .searchable(text: $searchQuery, prompt: "Search skills...")
-            .navigationTitle("Skills")
-            .toolbarTitleDisplayMode(.inlineLarge)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .background(
+        .clipShape(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 4)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -53,5 +82,42 @@ struct SkillsView: View {
 }
 
 #Preview {
-    SkillsView(user: .example, selectedCursusIndex: 1)
+    ZStack {
+        ZStack {
+            Color(.base)
+
+            RadialGradient(
+                colors: [
+                    Color.radialTopLeading.opacity(0.35),
+                    Color.radialTopLeading.opacity(0.0)
+                ],
+                center: .topLeading,
+                startRadius: 20,
+                endRadius: 320
+            )
+
+            RadialGradient(
+                colors: [
+                    Color.radialTrailing.opacity(0.30),
+                    Color.radialTrailing.opacity(0.0)
+                ],
+                center: .trailing,
+                startRadius: 10,
+                endRadius: 280
+            )
+
+            RadialGradient(
+                colors: [
+                    Color.radialBottom.opacity(0.25),
+                    Color.radialBottom.opacity(0.0)
+                ],
+                center: .bottom,
+                startRadius: 30,
+                endRadius: 300
+            )
+        }
+        .ignoresSafeArea()
+        
+        SkillsView(user: .example, selectedCursusIndex: 1)
+    }
 }

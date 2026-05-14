@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct CustomTabBar: View {
+    
+    var color: Color;
     @Binding var selectedTab: Int;
     @Namespace private var tabAniation;
 
@@ -28,18 +30,18 @@ struct CustomTabBar: View {
                 } label: {
                     VStack(spacing: 4) {
                         Image(systemName: tabs[index].icon)
-                            .font(.system(size: 22))
+                            .font(.system(size: 20))
                         Text(tabs[index].label)
                             .font(.caption2)
                     }
                     .frame(minWidth: 70)
-                    .foregroundStyle(selectedTab == index ? .blue : .gray)
+                    .foregroundStyle(selectedTab == index ? color : .gray)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 16)
                     .background {
                         if selectedTab == index {
                             Capsule()
-                                .fill(Color.blue.opacity(0.12))
+                                .fill(color.opacity(0.12))
                                 .matchedGeometryEffect(id: "TAB_HIGHLIGHT", in: tabAniation)
                         } else {
                             Capsule().fill(Color.clear)
@@ -51,9 +53,7 @@ struct CustomTabBar: View {
                 Spacer()
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.bottom, 8)
-        .padding(.top, 8)
+        .padding(.vertical, 8)
         .background(
             RoundedRectangle(cornerRadius: 99, style: .continuous)
                 .fill(.ultraThinMaterial.opacity(0.35))
@@ -110,7 +110,7 @@ struct PreviewWrapper: View {
                 )
             }
             .ignoresSafeArea()
-            CustomTabBar(selectedTab: $selectedTab)
+            CustomTabBar(color: Color(.progressAltEnd), selectedTab: $selectedTab)
         }
     }
 }

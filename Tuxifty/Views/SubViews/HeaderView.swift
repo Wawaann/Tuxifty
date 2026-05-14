@@ -13,32 +13,38 @@ struct HeaderView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
-            profileImage
+            VStack(alignment: .leading) {
+                profileImage
+                    .padding(.leading, 5)
+                    .padding(.bottom, 5)
+                
+                chipPoints(color: selectedCursusIndex == 0
+                           ? Color(.progressMainStart)
+                           : Color(.progressAltStart))
+            }
 
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 8) {
-                    Text(user.login)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.title)
-                    
-                    if let location = user.location, !location.isEmpty {
+            VStack(alignment: .leading, spacing: 35) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 8) {
+                        Text(user.login)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.title)
+                        
                         Spacer()
                         
-                        Text(location)
+                        Text(user.location ?? "Not log")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    if let campus = user.campus.first {
+                        Text(campus.name)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
-
-                if let campus = user.campus.first {
-                    Text(campus.name)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-
                 LevelBarView(user: user, cursusIndex: $selectedCursusIndex)
-                    .padding(.top, 4)
             }
         }
         .padding(16)
@@ -77,6 +83,45 @@ struct HeaderView: View {
                 .stroke(Color.avatarBorder.opacity(0.65), lineWidth: 2)
         )
     }
+    
+    @ViewBuilder
+    private func chipPoints(color: Color) -> some View {
+        HStack(spacing: 12) {
+            HStack(spacing: 4) {
+                Image(systemName: "australsign")
+                    .font(.caption)
+                    .fontWeight(.heavy)
+                    .foregroundStyle(color)
+
+                Text("\(user.wallet)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.title)
+                    .monospacedDigit()
+            }
+
+            HStack(spacing: 4) {
+                Text("EvP")
+                    .font(.caption)
+                    .fontWeight(.heavy)
+                    .foregroundStyle(color)
+
+                Text("\(user.correctionPoint)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.title)
+                    .monospacedDigit()
+            }
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .background(color.opacity(0.12))
+        .overlay(
+            Capsule()
+                .stroke(color.opacity(0.25), lineWidth: 1)
+        )
+        .clipShape(Capsule())
+    }
 }
 
 #Preview {
@@ -84,7 +129,7 @@ struct HeaderView: View {
 }
 
 private struct PreviewContainer: View {
-    @State private var selectedCursusIndex = 0
+    @State private var selectedCursusIndex = 0;
 
     var body: some View {
         HeaderView(user: User.example, selectedCursusIndex: $selectedCursusIndex)

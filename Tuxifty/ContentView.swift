@@ -18,28 +18,69 @@ struct ContentView: View {
         tokenViewModel: TokenViewModel = TokenViewModel(),
         userService: UserService = DefaultUserService()
     ) {
-        _tokenViewModel = State(initialValue: tokenViewModel)
-        self.userService = userService
+        _tokenViewModel = State(initialValue: tokenViewModel);
+        self.userService = userService;
     }
     
     var body: some View {
-        Group {
-            switch tokenViewModel.state {
-            case .idle:
-                Text("No data yet");
-            case .loading:
-                ProgressView {
-                    Text("Loading data")
+        ZStack {
+            BackgroundView()
+            
+            VStack {
+                switch tokenViewModel.state {
+                case .idle:
+                    Text("No data yet")
+                case .loading:
+                    ProgressView {
+                        Text("Loading data")
+                    }
+                case .loaded(_):
+                    RootView(token: tokenViewModel, userService: userService)
+                case .error(let error):
+                    VStack(spacing: 20) {
+                        Text("Something went wrong")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color(.title))
+
+                        Text(error)
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.pink)
+
+                        Button {
+                            Task {
+                                await tokenViewModel.fetchToken();
+                            }
+                        } label: {
+                            Text("Reload Data")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .background(.buttonBackground)
+                                .clipShape(Capsule())
+                                .contentShape(Capsule())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(20)
+                    .frame(maxWidth: 420)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(.ultraThinMaterial.opacity(0.35))
+                            .shadow(color: Color.shadow.opacity(0.15), radius: 9, x: 0, y: 4)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(Color.cardBorder.opacity(0.35), lineWidth: 1)
+                    )
+                    .padding(.horizontal)
                 }
-            case .loaded(_):
-                RootView(token: tokenViewModel, userService: userService);
-            case .error(let error):
-                Text("Error: \(error)")
-                    .foregroundStyle(Color.pink);
             }
-        }
-        .task {
-            await tokenViewModel.fetchToken();
+            .task {
+                await tokenViewModel.fetchToken();
+            }
         }
     }
 }

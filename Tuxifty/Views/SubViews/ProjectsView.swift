@@ -25,18 +25,51 @@ struct ProjectsView: View {
                 project.project.name.localizedCaseInsensitiveContains(searchQuery)
             }
 
-        NavigationStack {
+        VStack(alignment: .leading) {
+            Text("Projects")
+                .font(Font.largeTitle.bold())
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+            
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.gray)
+
+                TextField(
+                    cursusProjects.isEmpty ? "No project in this cursus" : "Search...",
+                    text: $searchQuery
+                )
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                
+                Button {
+                    searchQuery = ""
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(.gray)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color.clear)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(Color.gray.opacity(0.35), lineWidth: 1)
+            )
+            .padding(.horizontal, 20)
+
+            
             List(displayedProjects) { project in
-                SingleProjectView(project: project)
+                SingleProjectView(
+                    project: project,
+                    color: selectedCursusIndex == 0
+                        ? Color(.progressMainStart)
+                        : Color(.progressAltStart),
+                )
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .searchable(text: $searchQuery, prompt: "Search projects...")
-            .navigationTitle("Projects")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbarBackground(.hidden, for: .navigationBar)
         }
-        .toolbarBackground(.hidden, for: .navigationBar)
         .clipShape(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
         )

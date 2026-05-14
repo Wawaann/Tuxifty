@@ -22,6 +22,8 @@ struct User: Codable, Equatable {
     var image: Image42;
     var displayName: String?;
     var location: String?;
+    var correctionPoint: Int;
+    var wallet: Int;
     var cursus: [Cursus42];
     var campus: [Campus42];
     var projects: [Project42];
@@ -33,6 +35,8 @@ struct User: Codable, Equatable {
         case image;
         case displayName = "displayname";
         case location;
+        case correctionPoint = "correction_point";
+        case wallet;
         case cursus = "cursus_users";
         case campus;
         case projects = "projects_users";

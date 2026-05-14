@@ -10,6 +10,8 @@ import SwiftUI
 struct SingleProjectView: View {
     
     let project: Project42;
+    let color: Color;
+    
     private let dateFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter();
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds];
@@ -21,7 +23,7 @@ struct SingleProjectView: View {
             HStack(spacing: 10) {
                 Text(project.project.name)
                     .font(.headline)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.title)
                     .lineLimit(2)
 
                 Spacer()
@@ -47,16 +49,23 @@ struct SingleProjectView: View {
                 }
             }
 
-            if let markedAt = project.markedAt {
-                HStack(spacing: 6) {
-                    Image(systemName: "calendar")
-                        .foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .foregroundStyle(.secondary)
 
-                    Text(markedDateText(from: markedAt))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                Text(
+                    markedDateText(
+                        from: project.markedAt != nil
+                            ? project.markedAt!
+                            : project.createdAt,
+                        isMarked: project.markedAt != nil
+                            ? true
+                            : false
+                    )
+                )
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
-            }
         }
         .padding(14)
         .background(
@@ -84,8 +93,8 @@ struct SingleProjectView: View {
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .foregroundStyle(isDone ? .green : .blue)
-            .background((isDone ? Color.green : Color.blue).opacity(0.12))
+            .foregroundStyle(isDone ? .green : color)
+            .background((isDone ? Color.green : color).opacity(0.12))
             .clipShape(Capsule())
             .overlay(
                 Capsule()
@@ -119,21 +128,25 @@ struct SingleProjectView: View {
 
     private func validationColor(for project: Project42) -> Color {
         guard let validated = project.validated else {
-            return .blue;
+            return color;
         }
 
         return validated ? .green : .red;
     }
 
-    private func markedDateText(from markedAt: String) -> String {
+    private func markedDateText(from markedAt: String, isMarked: Bool) -> String {
         let date = dateFormatter.date(from: markedAt) ?? ISO8601DateFormatter().date(from: markedAt);
+        
+        guard let date else { return "Date error"; }
+        
+        let dateFormated = isMarked
+            ? "Marked: \(date.formatted(date: .abbreviated, time: .omitted))"
+            : "Created: \(date.formatted(date: .abbreviated, time: .omitted))"
 
-        guard let date else { return "Marked: -"; }
-
-        return "Marked: \(date.formatted(date: .abbreviated, time: .omitted))";
+        return dateFormated;
     }
 }
 
 #Preview {
-    SingleProjectView(project: Project42.example)
+    SingleProjectView(project: Project42.example, color: Color(.progressAltStart))
 }

@@ -21,57 +21,20 @@ struct RootView: View {
     }
     
     var body: some View {
-        ZStack {
-            ZStack {
-                Color(.base)
-
-                RadialGradient(
-                    colors: [
-                        Color.radialTopLeading.opacity(0.35),
-                        Color.radialTopLeading.opacity(0.0)
-                    ],
-                    center: .topLeading,
-                    startRadius: 20,
-                    endRadius: 320
-                )
-
-                RadialGradient(
-                    colors: [
-                        Color.radialTrailing.opacity(0.30),
-                        Color.radialTrailing.opacity(0.0)
-                    ],
-                    center: .trailing,
-                    startRadius: 10,
-                    endRadius: 280
-                )
-
-                RadialGradient(
-                    colors: [
-                        Color.radialBottom.opacity(0.25),
-                        Color.radialBottom.opacity(0.0)
-                    ],
-                    center: .bottom,
-                    startRadius: 30,
-                    endRadius: 300
-                )
+        Group {
+            switch userViewModel.state {
+            case .idle:
+                LoginView(userViewModel: userViewModel, tokenViewModel: token)
+                    .padding(.horizontal, 20)
+            case .loading:
+                ProgressView()
+            case .loaded(let user):
+                HomeView(userModel: user, userViewModel: userViewModel)
             }
-            .ignoresSafeArea()
-            
-            Group {
-                switch userViewModel.state {
-                case .idle:
-                    LoginView(userViewModel: userViewModel, tokenViewModel: token)
-                        .padding(.horizontal, 20)
-                case .loading:
-                    ProgressView()
-                case .loaded(let user):
-                    HomeView(userModel: user, userViewModel: userViewModel)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .errorToast(errorMessage: userViewModel.error) {
-                userViewModel.resetError();
-            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .errorToast(errorMessage: userViewModel.error) {
+            userViewModel.resetError();
         }
     }
 }

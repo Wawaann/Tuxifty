@@ -40,13 +40,18 @@ struct SingleSkillView: View {
                 .tint(linearGradient);
         }
         .padding(14)
-        .background(Color.white)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(.ultraThinMaterial.opacity(0.35))
+                .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 3)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(Color.blue.opacity(0.20), lineWidth: 1)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 3)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+        )
         .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
         .listRowSeparator(.hidden)
         .listRowBackground(Color.clear)
