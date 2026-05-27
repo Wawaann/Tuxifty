@@ -34,7 +34,9 @@ class TokenViewModel {
     
     func fetchToken() async {
 
-        guard self.state == .idle else { return; }
+        if self.state != .idle {
+            guard case .error = self.state else { return; }
+        }
         
         self.state = .loading;
         

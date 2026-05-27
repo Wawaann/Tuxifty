@@ -65,6 +65,7 @@ struct AchievementsView: View {
                     SingleAchievementView(achievement: achievement, iconURL: nil, color: color);
                 }
             }
+            .scrollIndicators(.hidden)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
         }

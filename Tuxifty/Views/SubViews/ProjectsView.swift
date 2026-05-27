@@ -67,6 +67,7 @@ struct ProjectsView: View {
                         : Color(.progressAltStart),
                 )
             }
+            .scrollIndicators(.hidden)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
         }

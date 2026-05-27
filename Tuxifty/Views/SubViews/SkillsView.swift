@@ -68,6 +68,7 @@ struct SkillsView: View {
                     : Color.indigo
                 )
             }
+            .scrollIndicators(.hidden)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
         }

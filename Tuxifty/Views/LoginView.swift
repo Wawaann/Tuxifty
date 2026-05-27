@@ -21,6 +21,8 @@ struct LoginView: View {
                 .foregroundStyle(Color(.title))
             
             TextField("Login", text: $login)
+                .textContentType(.username)
+                .keyboardType(.asciiCapable)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled(true)
                 .padding(.horizontal, 16)
